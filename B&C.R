@@ -5,19 +5,48 @@ generate_computer_vector <- function(){
 }
 
 get_guess <- function(num){
+  check<-0
   numbers_string<-readline("Please enter four numbers (seperated by spaces)> ")
-  user<-as.integer(unlist(strsplit(numbers_string, " ")))
-  num<-num-1
-#  print(paste("You have", num, "guess(es) remained"))
-  l<-length(user)
-  while(l!=4){
-    print(paste("You entered", l, "numbers"))
-    numbers_string<-readline("Please re-enter four numbers (seperated by spaces)> ")
-    user<-as.integer(unlist(strsplit(numbers_string, " ")))
-    l<-length(user)
+  input<-unlist(strsplit(numbers_string, " "))
+#  numeric<-check_numeric(input)
+  for(i in 1:length(input)){#check numeric
+    if(!grepl("^[0-9]+$",input[i]))
+    {
+      check<-check+1
+      print("You entered non-numeric input")
+      return(get_guess(num))
+    }
   }
+  user<-as.integer(input)
+  length<-length(user)
+  if(length !=4){#check length
+    check<-check+1
+    print(paste("You entered", length, "numbers"))
+    return(get_guess(num))
+  }
+  
+  #the input is perfect
+  check<-0
+  num<-num-1
   result<-c(user, num)
   return(result)
+}
+
+check_length<-function(user){
+  l<-length(user)
+  if(l==4){
+    return(1)
+  }
+  return(0)
+}
+
+check_numeric<-function(user){
+  for(i in 1:4){
+    if(is.na(user[i])||user[i]<1||user[i]>10){
+      return(0)
+    }
+    return(1)
+  }
 }
 
 number_bulls <- function(comp, user){
