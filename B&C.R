@@ -4,8 +4,8 @@ generate_computer_vector <- function(){
   return(comp)
 }
 
-get_guess <- function(num){
-  check<-0
+get_guess <- function(num, check){
+  #check<-0
   numbers_string<-readline("Please enter four numbers (seperated by spaces)> ")
   input<-unlist(strsplit(numbers_string, " "))
 #  numeric<-check_numeric(input)
@@ -14,7 +14,8 @@ get_guess <- function(num){
     {
       check<-check+1
       print("You entered non-numeric input")
-      return(get_guess(num))
+      error_check(check)
+      return(get_guess(num, check))
     }
   }
   user<-as.integer(input)
@@ -22,7 +23,22 @@ get_guess <- function(num){
   if(length !=4){#check length
     check<-check+1
     print(paste("You entered", length, "numbers"))
-    return(get_guess(num))
+    error_check(check)
+    return(get_guess(num, check))
+  }
+  #print(user)
+  #check duplication
+  for(i in 1:3){
+    #print(paste("i=",user[i]))
+    for(j in (i+1):4){
+      #print(paste("j=",user[j]))
+      if(user[i]==user[j]){
+        check<-check+1
+        print("Please enter distinct numbers")
+        error_check(check)
+        return(get_guess(num, check))
+      }
+    }
   }
   
   #the input is perfect
@@ -32,20 +48,9 @@ get_guess <- function(num){
   return(result)
 }
 
-check_length<-function(user){
-  l<-length(user)
-  if(l==4){
-    return(1)
-  }
-  return(0)
-}
-
-check_numeric<-function(user){
-  for(i in 1:4){
-    if(is.na(user[i])||user[i]<1||user[i]>10){
-      return(0)
-    }
-    return(1)
+error_check<-function(num){
+  if(num==3){
+    stop("Three incorrect inputs in a row")
   }
 }
 
@@ -95,12 +100,12 @@ do_response <- function(result, B, C, guessnum){
 }
 
 
-
 comp <- generate_computer_vector()
 #print(comp)
+check <- 0
 num <- 10
 while(num>=0){
-  guess <- get_guess(num)
+  guess <- get_guess(num, check)
   user<-guess[1:4]
 #  print(paste("user=", user))
   num<-guess[5]
