@@ -22,16 +22,13 @@ get_guess <- function(num, check){
   length<-length(user)
   if(length !=4){#check length
     check<-check+1
-    print(paste("You entered", length, "numbers"))
+    print(paste("You entered", length, "number(s)"))
     error_check(check)
     return(get_guess(num, check))
   }
-  #print(user)
   #check duplication
   for(i in 1:3){
-    #print(paste("i=",user[i]))
     for(j in (i+1):4){
-      #print(paste("j=",user[j]))
       if(user[i]==user[j]){
         check<-check+1
         print("Please enter distinct numbers")
@@ -40,9 +37,15 @@ get_guess <- function(num, check){
       }
     }
   }
-  
+  #check size of the numbers
+  for(i in 1:4)
+    if(user[i]<1 || user[i]>10){
+      check<-check+1
+      print("Please enter numbers between 1-10")
+      error_check(check)
+      return(get_guess(num, check))
+    }
   #the input is perfect
-  check<-0
   num<-num-1
   result<-c(user, num)
   return(result)
@@ -50,7 +53,7 @@ get_guess <- function(num, check){
 
 error_check<-function(num){
   if(num==3){
-    stop("Three incorrect inputs in a row")
+    stop("Three incorrect inputs in a row. GAME OVER")
   }
 }
 
@@ -101,13 +104,11 @@ do_response <- function(result, B, C, guessnum){
 
 
 comp <- generate_computer_vector()
-#print(comp)
-check <- 0
 num <- 10
 while(num>=0){
+  check <- 0
   guess <- get_guess(num, check)
   user<-guess[1:4]
-#  print(paste("user=", user))
   num<-guess[5]
   #number_bulls_and_cows(comp, user)
   answer <- number_bulls_and_cows(comp,user)
@@ -120,7 +121,6 @@ while(num>=0){
   }
   else if(num == 0){
     do_response(2, 0, 0, 0)
-#    print("You have run out of guesses. And the answer is:")
     print(comp)
     break
   }
