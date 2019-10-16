@@ -9,6 +9,13 @@ get_guess <- function(num){
   user<-as.integer(unlist(strsplit(numbers_string, " ")))
   num<-num-1
 #  print(paste("You have", num, "guess(es) remained"))
+  l<-length(user)
+  while(l!=4){
+    print(paste("You entered", l, "numbers"))
+    numbers_string<-readline("Please re-enter four numbers (seperated by spaces)> ")
+    user<-as.integer(unlist(strsplit(numbers_string, " ")))
+    l<-length(user)
+  }
   result<-c(user, num)
   return(result)
 }
@@ -57,6 +64,7 @@ do_response <- function(result, B, C, guessnum){
     print("You have run out of guesses. And the answer is:")
   }
 }
+
 
 
 comp <- generate_computer_vector()
